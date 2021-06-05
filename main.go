@@ -1,11 +1,21 @@
 package main
 
-import "goLeetcode/leetcode"
+import "fmt"
+
+type interface1 interface {
+	me1()
+	me2()
+}
+
+type A struct {
+	a int
+}
+
+func (a A) me1() int {
+	return 1
+}
 
 func main() {
-	in := make([]int, 3)
-	in[0] = -1
-	in[1] = 2
-	in[2] = 2
-	leetcode.SubsetsWithDup(in)
+	a := &A{}
+	fmt.Println(a.me1())
 }
