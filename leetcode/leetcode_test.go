@@ -10,3 +10,11 @@ func TestWaysToSplit(t *testing.T) {
 		t.Error("waysToSplit([]int{7, 0, 5}) != 0")
 	}
 }
+
+func TestConstructDistancedSequence(t *testing.T) {
+	constructDistancedSequence(3)
+}
+
+func TestMinOperations(t *testing.T) {
+	minOperations([]int{6, 4, 8, 1, 3, 2}, []int{4, 7, 6, 2, 3, 8, 6, 1})
+}

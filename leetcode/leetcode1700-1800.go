@@ -80,3 +80,163 @@ func waysToSplit(nums []int) int {
 	}
 	return sum
 }
+
+//1713. 得到子序列的最少操作次数
+func minOperations(target []int, arr []int) int {
+	hMap := make(map[int]int)
+	for i, i2 := range target {
+		hMap[i2] = i
+	}
+	ar := make([]int, 0)
+	for _, i2 := range arr {
+		if num, exist := hMap[i2]; exist {
+			ar = append(ar, num)
+		}
+	}
+	if len(ar) == 0 {
+		return len(target)
+	}
+	d := make([]int, 1, len(ar))
+	d[0] = ar[0]
+	for _, i2 := range ar {
+		if i2 > d[len(d)-1] {
+			d = append(d, i2)
+		} else {
+			l, r := 0, len(d)-1
+			for l < r {
+				mid := l + (r-l)/2
+				if d[mid] < i2 {
+					l = mid + 1
+				} else {
+					r = mid
+				}
+			}
+			d[l] = i2
+		}
+	}
+	return len(target) - len(d)
+}
+
+//1716. 计算力扣银行的钱
+func totalMoney(n int) int {
+	sum := 0
+	for i := 1; i <= n; i++ {
+		sum += (i-1)%7 + (i-1)/7 + 1
+	}
+	return sum
+}
+
+//1717. 删除子字符串的最大得分
+func maximumGain(s string, x int, y int) int {
+	sum := 0
+	if x > y {
+		a, b := 0, 0
+		for i, _ := range s {
+			if s[i:i+1] == "a" {
+				a++
+			} else if s[i:i+1] == "b" {
+				if a > 0 {
+					a--
+					sum += x
+				} else {
+					b++
+				}
+			} else {
+				if a > 0 && b > 0 {
+					if a > b {
+						sum += y * b
+					} else {
+						sum += y * a
+					}
+				}
+				a, b = 0, 0
+			}
+		}
+		if a > 0 && b > 0 {
+			if a > b {
+				sum += y * b
+			} else {
+				sum += y * a
+			}
+		}
+		return sum
+	} else {
+		a, b := 0, 0
+		for i, _ := range s {
+			if s[i:i+1] == "b" {
+				b++
+			} else if s[i:i+1] == "a" {
+				if b > 0 {
+					b--
+					sum += y
+				} else {
+					a++
+				}
+			} else {
+				if a > 0 && b > 0 {
+					if a > b {
+						sum += x * b
+					} else {
+						sum += x * a
+					}
+				}
+				a, b = 0, 0
+			}
+		}
+		if a > 0 && b > 0 {
+			if a > b {
+				sum += x * b
+			} else {
+				sum += x * a
+			}
+		}
+		return sum
+	}
+}
+
+//1718. 构建字典序最大的可行序列
+func constructDistancedSequence(n int) []int {
+	res := make([]int, n*2-1)
+	hMap := make(map[int]bool)
+	for i := 1; i <= n; i++ {
+		hMap[i] = true
+	}
+	traceBack1718(hMap, res, 0, n)
+	return res
+}
+
+func traceBack1718(hMap map[int]bool, res []int, now int, n int) bool {
+	if now == len(res) {
+		return true
+	} else {
+		if res[now] != 0 {
+			return traceBack1718(hMap, res, now+1, n)
+		} else {
+			for i := n; i >= 2; i-- {
+				if hMap[i] && now+i < len(res) && res[now+i] == 0 {
+					hMap[i] = false
+					res[now] = i
+					res[now+i] = i
+					if traceBack1718(hMap, res, now+1, n) {
+						return true
+					} else {
+						res[now] = 0
+						res[now+i] = 0
+						hMap[i] = true
+					}
+				}
+			}
+			if hMap[1] {
+				hMap[1] = false
+				res[now] = 1
+				if traceBack1718(hMap, res, now+1, n) {
+					return true
+				} else {
+					hMap[1] = true
+					res[now] = 0
+				}
+			}
+			return false
+		}
+	}
+}
