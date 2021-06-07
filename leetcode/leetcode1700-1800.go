@@ -240,3 +240,40 @@ func traceBack1718(hMap map[int]bool, res []int, now int, n int) bool {
 		}
 	}
 }
+
+//1720. 解码异或后的数组
+func decode(encoded []int, first int) []int {
+	res := make([]int, len(encoded)+1)
+	res[0] = first
+	for in, num := range encoded {
+		res[in+1] = res[in] ^ num
+	}
+	return res
+}
+
+//1721. 交换链表中的节点
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func swapNodes(head *ListNode, k int) *ListNode {
+	p := head
+	a, b, l := 0, 0, 1
+	for p.Next != nil {
+		p = p.Next
+		l++
+	}
+	p = head
+	for i := 0; i < k-1; i++ {
+		p = p.Next
+	}
+	a = p.Val
+	q := head
+	for i := 0; i < l-k; i++ {
+		q = q.Next
+	}
+	b = q.Val
+	p.Val, q.Val = b, a
+	return head
+}
