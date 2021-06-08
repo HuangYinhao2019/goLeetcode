@@ -18,3 +18,7 @@ func TestConstructDistancedSequence(t *testing.T) {
 func TestMinOperations(t *testing.T) {
 	minOperations([]int{6, 4, 8, 1, 3, 2}, []int{4, 7, 6, 2, 3, 8, 6, 1})
 }
+
+func TestMinimumHammingDistance(t *testing.T) {
+	minimumHammingDistance([]int{5, 1, 2, 4, 3}, []int{1, 5, 4, 2, 3}, [][]int{{0, 4}, {4, 2}, {1, 3}, {1, 4}})
+}

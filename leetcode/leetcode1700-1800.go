@@ -277,3 +277,54 @@ func swapNodes(head *ListNode, k int) *ListNode {
 	p.Val, q.Val = b, a
 	return head
 }
+
+//1722. 执行交换操作后的最小汉明距离
+func minimumHammingDistance(source []int, target []int, allowedSwaps [][]int) int {
+	len := len(source)
+	h := make([]int, len)
+	for i := 0; i < len; i++ {
+		h[i] = i
+	}
+	for _, swap := range allowedSwaps {
+		r1, r2 := swap[0], swap[1]
+		for h[r1] != r1 {
+			r1 = h[r1]
+		}
+		for h[r2] != r2 {
+			r2 = h[r2]
+		}
+		if h[r1] != h[r2] {
+			h[r1] = h[r2]
+		}
+	}
+	sum := len
+	hMap := make(map[int]map[int]int)
+	for i := 0; i < len; i++ {
+		hMap[i] = make(map[int]int)
+	}
+	for i := 0; i < len; i++ {
+		lis := make([]int, 0)
+		r := i
+		for h[r] != r {
+			lis = append(lis, r)
+			r = h[r]
+		}
+		for _, li := range lis {
+			h[li] = r
+		}
+	}
+	for i := 0; i < len; i++ {
+		if _, exist := hMap[h[i]][source[i]]; exist {
+			hMap[h[i]][source[i]]++
+		} else {
+			hMap[h[i]][source[i]] = 1
+		}
+	}
+	for i := 0; i < len; i++ {
+		if nu, exist := hMap[h[i]][target[i]]; exist && nu > 0 {
+			hMap[h[i]][target[i]]--
+			sum--
+		}
+	}
+	return sum
+}
