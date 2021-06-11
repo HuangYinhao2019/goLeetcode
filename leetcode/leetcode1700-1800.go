@@ -1,6 +1,7 @@
 package leetcode
 
 import (
+	"math"
 	"sort"
 )
 
@@ -327,4 +328,81 @@ func minimumHammingDistance(source []int, target []int, allowedSwaps [][]int) in
 		}
 	}
 	return sum
+}
+
+//1723. 完成所有工作的最短时间
+func minimumTimeRequired(jobs []int, k int) int {
+	n := len(jobs)
+	m := 1 << n
+	sum := make([]int, m)
+	for i := 1; i < m; i++ {
+		p, c := i, 0
+		for p > 0 {
+			if p % 2 == 1 {
+				sum[i] += jobs[c]
+			}
+			p, c = p / 2, c + 1
+		}
+	}
+
+	dp := make([][]int, k)
+	for i := range dp {
+		dp[i] = make([]int, m)
+	}
+	for i, s := range sum {
+		dp[0][i] = s
+	}
+
+	for i := 1; i < k; i++ {
+		for j := 0; j < (1 << n); j++ {
+			minn := math.MaxInt64
+			for x := j; x > 0; x = (x - 1) & j {
+				minn = min(minn, max(dp[i-1][j-x], sum[x]))
+			}
+			dp[i][j] = minn
+		}
+	}
+	return dp[k-1][(1<<n)-1]
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+//1727. 重新排列后的最大子矩阵
+func largestSubmatrix(matrix [][]int) int {
+	preGrid := make([][]int, len(matrix))
+	n, m := len(matrix), len(matrix[0])
+	res := 0
+	for i := 0; i < n; i++ {
+		preGrid[i] = make([]int, m)
+	}
+	for i := 0; i < m; i++ {
+		preGrid[0][i] = matrix[0][i]
+		for j := 1; j < n; j++ {
+			if matrix[j][i] == 1 {
+				preGrid[j][i] = preGrid[j - 1][i] + 1
+			}
+		}
+	}
+	for p := 0; p < n; p++ {
+		sort.Slice(preGrid[p], func(i, j int) bool {
+			return preGrid[p][i] > preGrid[p][j]
+		})
+		for q := 0; q < m; q++ {
+			height := preGrid[p][q]
+			res = max(res, height * (q + 1))
+		}
+	}
+	return res
 }

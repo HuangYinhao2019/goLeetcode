@@ -22,3 +22,7 @@ func TestMinOperations(t *testing.T) {
 func TestMinimumHammingDistance(t *testing.T) {
 	minimumHammingDistance([]int{5, 1, 2, 4, 3}, []int{1, 5, 4, 2, 3}, [][]int{{0, 4}, {4, 2}, {1, 3}, {1, 4}})
 }
+
+func TestLargestSubmatrix(t *testing.T) {
+	largestSubmatrix([][]int{{0,0,1},{1,1,1},{1,0,1}})
+}
