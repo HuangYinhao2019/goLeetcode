@@ -406,3 +406,73 @@ func largestSubmatrix(matrix [][]int) int {
 	}
 	return res
 }
+
+//1732. 找到最高海拔
+func largestAltitude(gain []int) int {
+	mmax, now := 0, 0
+	for _, v := range gain {
+		now = now + v
+		mmax = max(now ,mmax)
+	}
+	return mmax
+}
+
+//1733. 需要教语言的最少人数
+func minimumTeachings(n int, languages [][]int, friendships [][]int) int {
+	p := len(languages)
+	mmin := p
+	lMap := make(map[int]map[int]bool)
+	fMap := make([][]int, 0, len(friendships))
+	for i := 0; i < p; i++ {
+		lMap[i + 1] = make(map[int]bool)
+		for _, i3 := range languages[i] {
+			lMap[i + 1][i3] = true
+		}
+	}
+	for _, friendship := range friendships {
+		a, b := friendship[0], friendship[1]
+		flag := false
+		for b2 := range lMap[a] {
+			if lMap[b][b2] {
+				flag = true
+				break
+			}
+		}
+		if !flag {
+			fMap = append(fMap, []int{a, b})
+		}
+	}
+	for i := 1; i <= n; i++ {
+		sMap := make(map[int]bool)
+		for _, friendship := range fMap {
+			a, b := friendship[0], friendship[1]
+			if v, ok := lMap[a][i]; !ok {
+				sMap[a] = v
+			}
+			if v, ok := lMap[b][i]; !ok {
+				sMap[b] = v
+			}
+		}
+		mmin = min(mmin, len(sMap))
+	}
+	return mmin
+}
+
+//1734. 解码异或后的排列
+func decode2(encoded []int) []int {
+	n := len(encoded) + 1
+	xor := 1
+	for i := 2; i <= n; i++ {
+		xor = xor ^ i
+	}
+	res := make([]int, n)
+	res[0] = xor
+	for i := 1; i < len(encoded); i += 2 {
+		res[0] = res[0] ^ encoded[i]
+	}
+	for i := 1; i < n; i++ {
+		res[i] = res[i - 1] ^ encoded[i - 1]
+	}
+	return res
+}
+
