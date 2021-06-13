@@ -476,3 +476,43 @@ func decode2(encoded []int) []int {
 	return res
 }
 
+//1736. 替换隐藏数字得到的最晚时间
+func maximumTime(time string) string {
+	l,r := time[:2],time[3:]
+	res := ""
+	if l[0] == '?'{
+		if l[1] >= '4' && l[1] != '?'{
+			res += "1"
+		}else{
+			res += "2"
+		}
+
+	}else{
+		res += string(l[0])
+	}
+	if l[1] == '?'{
+		if res[0] == '0' || res[0] == '1'{
+			res += "9"
+		}else{
+			res += "3"
+		}
+	}else{
+		res += string(l[1])
+	}
+	res+=":"
+	if r[0] == '?'{
+		res += "5"
+	}else{
+		res += string(r[0])
+	}
+	if r[1] == '?'{
+		res += "9"
+	}else{
+		res += string(r[1])
+	}
+	return res
+}
+
+
+
+
