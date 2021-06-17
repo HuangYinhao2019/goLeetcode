@@ -513,6 +513,24 @@ func maximumTime(time string) string {
 	return res
 }
 
-
+//1737. 满足三条件之一需改变的最少字符数
+func minCharacters(a string, b string) int {
+	aa, bb := make([]int, 26), make([]int, 26)
+	for _, i2 := range a {
+		aa[i2 - 'a']++
+	}
+	for _, i2 := range b {
+		bb[i2 - 'a']++
+	}
+	asum, bsum := len(a), len(b)
+	res, pa, pb := math.MaxInt32, 0, 0
+	for i := 0; i < 25; i++ {
+		pa += aa[i]
+		pb += bb[i]
+		res = min(min(res, asum + bsum - aa[i] - bb[i]), min(asum - pa + pb, bsum - pb + pa))
+	}
+	res = min(res, asum + bsum - aa[25] - bb[25])
+	return res
+}
 
 
