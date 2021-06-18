@@ -533,4 +533,29 @@ func minCharacters(a string, b string) int {
 	return res
 }
 
+//1738. 找出第 K 大的异或坐标值
+func kthLargestValue(matrix [][]int, k int) int {
+	m, n := len(matrix), len(matrix[0])
+	kres := make([]int, 0)
+	for _, ints := range matrix {
+		for i, _ := range ints {
+			if i > 0 {
+				ints[i] = ints[i] ^ ints[i - 1]
+			}
+		}
+	}
+	for j := 0; j < n; j++ {
+		for i := 1; i < m; i++ {
+			matrix[i][j] = matrix[i][j] ^ matrix[i - 1][j]
+		}
+	}
+	for _, ints := range matrix {
+		for _, i3 := range ints {
+			kres = append(kres, i3)
+		}
+	}
+	sort.Ints(kres)
+	return kres[m * n - k]
+}
+
 

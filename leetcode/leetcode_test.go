@@ -26,3 +26,7 @@ func TestMinimumHammingDistance(t *testing.T) {
 func TestLargestSubmatrix(t *testing.T) {
 	largestSubmatrix([][]int{{0,0,1},{1,1,1},{1,0,1}})
 }
+
+func TestKthLargestValue(t *testing.T) {
+	kthLargestValue([][]int{{5,2},{1,6}}, 1)
+}
