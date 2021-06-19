@@ -365,20 +365,6 @@ func minimumTimeRequired(jobs []int, k int) int {
 	return dp[k-1][(1<<n)-1]
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 //1727. 重新排列后的最大子矩阵
 func largestSubmatrix(matrix [][]int) int {
 	preGrid := make([][]int, len(matrix))
@@ -557,5 +543,97 @@ func kthLargestValue(matrix [][]int, k int) int {
 	sort.Ints(kres)
 	return kres[m * n - k]
 }
+
+//1739. 放置盒子
+func minimumBoxes(n int) int {
+	height, bottom, total := 0, 0, 0
+	for total < n {
+		height++
+		bottom = height * (height + 1) / 2
+		total += bottom
+	}
+	if total > n{
+		height--
+		total -= bottom
+		bottom = height * (height + 1) / 2
+		for i := 1; i <= height + 1; i, bottom = i + 1, bottom + 1 {
+			if total >= n {
+				return bottom
+			}
+			total += i
+		}
+	}
+	return bottom
+}
+
+//1742. 盒子中小球的最大数量
+func countBalls(lowLimit int, highLimit int) int {
+	hMap := make(map[int]int)
+	for i := lowLimit; i <= highLimit; i++ {
+		sum := 0
+		p := i
+		for p > 0 {
+			sum += p % 10
+			p /= 10
+		}
+		if _, exist := hMap[sum]; exist {
+			hMap[sum]++
+		} else {
+			hMap[sum] = 1
+		}
+	}
+	res := 0
+	for _, i2 := range hMap {
+		res = max(res, i2)
+	}
+	return res
+}
+
+//1743. 从相邻元素对还原数组
+func restoreArray(adjacentPairs [][]int) []int {
+	hMap := make(map[int]map[int]bool)
+	for _, pair := range adjacentPairs {
+		if _, ok := hMap[pair[0]]; !ok {
+			hMap[pair[0]] = make(map[int]bool)
+		}
+		if _, ok := hMap[pair[1]]; !ok {
+			hMap[pair[1]] = make(map[int]bool)
+		}
+		hMap[pair[0]][pair[1]] = true
+		hMap[pair[1]][pair[0]] = true
+	}
+	res := make([]int, len(adjacentPairs) + 1)
+	for i, ints := range hMap {
+		if len(ints) == 1 {
+			res[0] = i
+		}
+	}
+	for i := 1; i < len(res); i++ {
+		l := res[i - 1]
+		for j, b := range hMap[l] {
+			if b {
+				res[i] = j
+				b = false
+				hMap[j][l] = false
+			}
+		}
+	}
+	return res
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
