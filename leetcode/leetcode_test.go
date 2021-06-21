@@ -30,3 +30,7 @@ func TestLargestSubmatrix(t *testing.T) {
 func TestKthLargestValue(t *testing.T) {
 	kthLargestValue([][]int{{5,2},{1,6}}, 1)
 }
+
+func TestCheckPartitioning(t *testing.T) {
+	checkPartitioning("abcbdd")
+}

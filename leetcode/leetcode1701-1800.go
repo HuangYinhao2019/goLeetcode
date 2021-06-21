@@ -621,10 +621,55 @@ func restoreArray(adjacentPairs [][]int) []int {
 	return res
 }
 
+//1744. 你能在你最喜欢的那天吃到你最喜欢的糖果吗？
+func canEat(candiesCount []int, queries [][]int) []bool {
+	prefix := make([]int, len(candiesCount) + 1)
+	for i, _ := range candiesCount {
+		prefix[i + 1] = prefix[i] + candiesCount[i]
+	}
+	ans := make([]bool, len(queries))
+	for i, query := range queries {
+		cType, day, m := query[0], query[1], query[2]
+		a, b := prefix[cType] + 1, prefix[cType + 1]
+		l, r := day + 1, m * (day + 1)
+		if (l <= b && l >= a) || (r <= b && r >= a) || (l <= a && r >= b){
+			ans[i] = true
+		}
+	}
+	return ans
+}
 
-
-
-
+//1745. 回文串分割 IV
+func checkPartitioning(s string) bool {
+	hMap := make(map[int]map[int]bool)
+	for i := 0; i < len(s); i++ {
+		hMap[i] = map[int]bool{}
+		hMap[i][i] = true
+	}
+	dp := make([][]bool, len(s) + 1)
+	for i, _ := range dp {
+		dp[i] = make([]bool, 4)
+	}
+	dp[1][1] = true
+	for i := 1; i < len(s); i++ {
+		dp[i + 1][2] = dp[i][1]
+		dp[i + 1][3] = dp[i][2]
+		for j := 0; j < i; j++ {
+			if s[i] == s[j] {
+				if j == i - 1 || hMap[j + 1][i - 1] {
+					hMap[j][i] = true
+					if j == 0 {
+						dp[i + 1][1] = true
+					} else {
+						dp[i + 1][2] = dp[i + 1][2] || dp[j][1]
+						dp[i + 1][3] = dp[i + 1][3] || dp[j][2]
+					}
+				}
+			}
+		}
+	}
+	return dp[len(s)][3] || dp[len(s)][1]
+}
 
 
 
