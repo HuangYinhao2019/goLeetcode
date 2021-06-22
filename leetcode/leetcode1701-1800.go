@@ -671,10 +671,81 @@ func checkPartitioning(s string) bool {
 	return dp[len(s)][3] || dp[len(s)][1]
 }
 
+//1748. 唯一元素的和
+func sumOfUnique(nums []int) int {
+	sum := 0
+	hMap := make(map[int]int)
+	for _, num := range nums {
+		if _, ok := hMap[num]; ok {
+			hMap[num]++
+		} else {
+			hMap[num] = 1
+		}
+	}
+	for _, num := range nums {
+		if hMap[num] == 1 {
+			sum += num
+		}
+	}
+	return sum
+}
 
+//1749. 任意子数组和的绝对值的最大值
+func maxAbsoluteSum(nums []int) int {
+	lsum, rsum := 0, 0
+	lres, rres := 0, 0
+	for i, j := 0, 0; j < len(nums); {
+		for lsum < 0 && i < j {
+			lsum -= nums[i]
+			i++
+			lres = max(lsum, lres)
+		}
+		lsum += nums[j]
+		j++
+		lres = max(lsum, lres)
+		if j == len(nums) {
+			for i < len(nums) {
+				lsum -= nums[i]
+				i++
+				lres = max(lsum, lres)
+			}
+		}
+	}
+	for i, j := 0, 0; j < len(nums); {
+		for rsum > 0 && i < j {
+			rsum -= nums[i]
+			i++
+			rres = min(rsum, rres)
+		}
+		rsum += nums[j]
+		j++
+		rres = min(rsum, rres)
+		if j == len(nums) {
+			for i < len(nums) {
+				rsum -= nums[i]
+				i++
+				rres = min(rsum, rres)
+			}
+		}
+	}
+	return max(lres, -rres)
+}
 
-
-
+//1750. 删除字符串两端相同字符后的最短长度
+func minimumLength(s string) int {
+	l, r := 0, len(s) - 1
+	for l < r && s[l] == s[r] {
+		for l < r && s[l] == s[l + 1] {
+			l++
+		}
+		for l < r && s[r] == s[r - 1] {
+			r--
+		}
+		l++
+		r--
+	}
+	return max(r - l + 1, 0)
+}
 
 
 

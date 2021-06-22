@@ -34,3 +34,7 @@ func TestKthLargestValue(t *testing.T) {
 func TestCheckPartitioning(t *testing.T) {
 	checkPartitioning("abcbdd")
 }
+
+func TestMaxAbsoluteSum(t *testing.T) {
+	maxAbsoluteSum([]int{1,-3,2,3,-4})
+}
