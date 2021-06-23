@@ -747,9 +747,57 @@ func minimumLength(s string) int {
 	return max(r - l + 1, 0)
 }
 
+//1752. 检查数组是否经排序和轮转得到
+func check(nums []int) bool {
+	k := 0
+	for i, _ := range nums {
+		if nums[i] < nums[(i - 1 + len(nums)) % len(nums)] {
+			k++
+		}
+	}
+	return k <= 1
+}
 
+//1753. 移除石子的最大得分
+func maximumScore(a int, b int, c int) int {
+	round := (a + b + c)/2
+	if a < b {
+		a, b = b, a
+	}
+	if a < c && a + b < round {
+		round = a + b
+	} else if a >= c && b + c < round {
+		round = b + c
+	}
 
+	return  round
+}
 
+//1754. 构造字典序最大的合并字符串
+func largestMerge(word1 string, word2 string) string {
+	var merge string = ""
+	for i, j := 0, 0; i < len(word1) || j < len(word2); {
+		if getFromString(word1[i:], word2[j:]) {
+			merge += word1[i:i+1]
+			i++
+		} else {
+			merge += word2[j:j+1]
+			j++
+		}
+	}
+	return merge
+}
+
+func getFromString(a, b string) bool {
+	for i := range a {
+		if i + 1 > len(b) || a[i] > b[i] {
+			return true
+		} else if b[i] > a[i] {
+			return false
+		}
+	}
+	return false
+}
 
 
 
