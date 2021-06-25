@@ -747,6 +747,47 @@ func minimumLength(s string) int {
 	return max(r - l + 1, 0)
 }
 
+//1751. 最多可以参加的会议数目 II
+func maxValue(events [][]int, k int) int {
+	sort.Slice(events, func(i, j int) bool {
+		return events[i][1] < events[j][1]
+	})
+	dp := make([][]int, len(events))
+	for i := range dp {
+		dp[i] = make([]int, k + 1)
+		for j := range dp[i] {
+			dp[i][j] = math.MinInt32
+		}
+		dp[i][0] = 0
+	}
+	dp[0][1] = events[0][2]
+	for i := 1; i <= k; i++ {
+		for j := 1; j < len(events); j++ {
+			dp[j][i] = dp[j - 1][i]
+			be := events[j][0]
+			l, r := 0, j - 1
+			for l < r {
+				mid := (l + r + 1) >> 1
+				if events[mid][1] < be {
+					l = mid
+				} else {
+					r = mid - 1
+				}
+			}
+			if events[l][1] >= be {
+				dp[j][1] = max(dp[j][1], events[j][2])
+			} else {
+				dp[j][i] = max(dp[j][i], dp[l][i - 1] + events[j][2])
+			}
+		}
+	}
+	res := 0
+	for p := 1; p <= k; p++ {
+		res = max(res, dp[len(events) - 1][p])
+	}
+	return res
+}
+
 //1752. 检查数组是否经排序和轮转得到
 func check(nums []int) bool {
 	k := 0
@@ -798,6 +839,32 @@ func getFromString(a, b string) bool {
 	}
 	return false
 }
+
+//1771. 由子序列构造的最长回文串的长度
+func longestPalindrome(word1 string, word2 string) int {
+	word := word1 + word2
+	dp := make([][]int, len(word))
+	for i := range dp {
+		dp[i] = make([]int, len(word))
+		dp[i][i] = 1
+	}
+	res := 0
+	for j := 1; j < len(word); j++ {
+		for i := 0; i + j < len(word); i++ {
+			if word[i] == word[i + j] {
+				dp[i][i + j] = dp[i + 1][i + j - 1] + 2
+				if i < len(word1) && i + j >= len(word1) {
+					res = max(res, dp[i][i + j])
+				}
+			} else {
+				dp[i][i + j] = max(dp[i + 1][i + j], dp[i][i + j - 1])
+			}
+		}
+	}
+	return res
+}
+
+
 
 
 

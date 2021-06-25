@@ -38,3 +38,7 @@ func TestCheckPartitioning(t *testing.T) {
 func TestMaxAbsoluteSum(t *testing.T) {
 	maxAbsoluteSum([]int{1,-3,2,3,-4})
 }
+
+func TestMaxValue(t *testing.T) {
+	maxValue([][]int{{30,40,34},{6,11,6},{60,81,36}}, 1)
+}
