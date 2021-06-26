@@ -840,6 +840,50 @@ func getFromString(a, b string) bool {
 	return false
 }
 
+//1755. 最接近目标值的子序列和
+func minAbsDifference(nums []int, goal int) int {
+	half := len(nums) / 2
+	lsum := make([]int, 1 << half)
+	rsum := make([]int, 1 << (len(nums) - half))
+	for i := 0; i < 1 << half; i++ {
+		k, sum, c := i, 0, 0
+		for k != 0 {
+			if k % 2 == 1 {
+				sum += nums[c]
+			}
+			k, c = k / 2, c + 1
+		}
+		lsum[i] = sum
+	}
+	for i := 0; i < 1 << (len(nums) - half); i++ {
+		k, sum, c := i, 0, 0
+		for k != 0 {
+			if k % 2 == 1 {
+				sum += nums[half + c]
+			}
+			k, c = k / 2, c + 1
+		}
+		rsum[i] = sum
+	}
+
+	sort.Ints(lsum)
+	sort.Ints(rsum)
+	i, j := 0, len(rsum) - 1
+	res := math.MaxInt32
+	for i < len(lsum) && j >= 0 {
+		s := lsum[i] + rsum[j]
+		res = min(res, abs(s - goal))
+		if s > goal {
+			j--
+		} else if s < goal {
+			i++
+		} else {
+			return 0
+		}
+	}
+	return res
+}
+
 //1771. 由子序列构造的最长回文串的长度
 func longestPalindrome(word1 string, word2 string) int {
 	word := word1 + word2
