@@ -846,24 +846,22 @@ func minAbsDifference(nums []int, goal int) int {
 	lsum := make([]int, 1 << half)
 	rsum := make([]int, 1 << (len(nums) - half))
 	for i := 0; i < 1 << half; i++ {
-		k, sum, c := i, 0, 0
-		for k != 0 {
-			if k % 2 == 1 {
-				sum += nums[c]
+		for j := 0; j < half; j++ {
+			if ((i & (1 << j)) == 0) {
+				continue
 			}
-			k, c = k / 2, c + 1
+			lsum[i] = lsum[i - (1 << j)] + nums[j]
+			break
 		}
-		lsum[i] = sum
 	}
 	for i := 0; i < 1 << (len(nums) - half); i++ {
-		k, sum, c := i, 0, 0
-		for k != 0 {
-			if k % 2 == 1 {
-				sum += nums[half + c]
+		for j := 0; j < (len(nums) - half); j++ {
+			if ((i & (1 << j)) == 0) {
+				continue
 			}
-			k, c = k / 2, c + 1
+			rsum[i] = rsum[i - (1 << j)] + nums[j + half]
+			break
 		}
-		rsum[i] = sum
 	}
 
 	sort.Ints(lsum)
