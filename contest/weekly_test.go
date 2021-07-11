@@ -9,3 +9,7 @@ func TestRotateGrid(t *testing.T) {
 func TestWonderfulSubstrings(t *testing.T) {
 	wonderfulSubstrings("aba")
 }
+
+func TestColorTheGrid(t *testing.T) {
+	colorTheGrid(5, 5)
+}
